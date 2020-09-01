@@ -1,0 +1,14 @@
+server:
+  port: 8080
+
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.NonRegisteringDriver
+    username: root
+    password: root
+    url: jdbc:mysql://39.106.155.211:3306/ssh?charaterEncoding=utf-8
+  freemarker:
+    suffix: .html
+    content-type: text/html
+
