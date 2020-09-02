@@ -3,8 +3,11 @@ package com.ssh.users.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.List;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Setter;
 
 /**
  * <p>
@@ -70,6 +73,11 @@ public class Users implements Serializable {
      * 状态
      */
     private String locaed;
+
+    /**
+     * 角色
+     */
+    private List<Roles> roles;
 
 
 }
