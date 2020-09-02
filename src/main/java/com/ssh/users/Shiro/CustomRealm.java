@@ -14,6 +14,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
@@ -53,15 +54,21 @@ public class CustomRealm extends AuthorizingRealm {
         if(authenticationToken.getPrincipal() == null){
             return null;
         }
+
         //获取登录用户名
         String username = (String) authenticationToken.getPrincipal();
         //根据登录用户名查询数据库
         Users user = iUsersService.getOne((Wrapper<Users>) authenticationToken.getPrincipal());
+        ByteSource salt = ByteSource.Util.bytes(user.getSalt());
         if(user == null){
             return null; //如果没有查询到当前用户  返回 用户名或密码错误
         }else {
             // 这里验证authenticationToken和simpleAuthenticationInfo的信息
-            SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(username,user.getPassword(),getName());
+            SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(
+                    username, //用户名
+                    user.getPassword(), //密码
+                    salt, //加盐的盐值
+                    getName()); //realm name
             return simpleAuthenticationInfo;
         }
 
