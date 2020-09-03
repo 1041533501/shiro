@@ -1,15 +1,19 @@
 package com.ssh.users.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
 import com.ssh.users.entity.Users;
 import com.ssh.users.service.IUsersService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -25,6 +29,9 @@ import java.util.List;
 @Controller
 @RequestMapping("/users")
 public class UsersController {
+
+    private static Logger logger = LoggerFactory.getLogger(UsersController.class);
+
     @Resource
     private IUsersService iUsersService;
 
@@ -32,13 +39,26 @@ public class UsersController {
     public String login(){
 //        List<Users> list = iUsersService.list();
 //        list.forEach(System.out :: println);
-        QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("Username","admin");
-        Users u = new Users();
-        u.setUsername("admin");
-        Users one = iUsersService.getOne(queryWrapper);
-        System.out.println(one);
+
+        iUsersService.selectRole();
+
+        Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken("admin","admin");
+        System.out.println(usernamePasswordToken.toString()+"====================================================");
+        try {
+            subject.login(usernamePasswordToken);
+        }catch (UnknownAccountException uk){
+            logger.error("用户不存在");
+            return "login";
+        }
         return "index";
+    }
+
+    @RequestMapping(value = "success",method = RequestMethod.GET)
+    public String success(){
+
+
+        return "success";
     }
 
 }

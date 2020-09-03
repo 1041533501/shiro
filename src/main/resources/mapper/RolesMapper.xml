@@ -8,6 +8,7 @@
         <result column="rolename" property="rolename" />
         <result column="description" property="description" />
         <result column="available" property="available" />
+
     </resultMap>
 
     <!-- 通用查询结果列 -->
