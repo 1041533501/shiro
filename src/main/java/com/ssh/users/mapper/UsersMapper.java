@@ -19,5 +19,6 @@ public interface UsersMapper extends BaseMapper<Users> {
 
 
     List<Users> selectRole();
+    Users selecting(String username);
 
 }

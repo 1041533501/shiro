@@ -27,4 +27,9 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
     public List<Users> selectRole() {
         return usersMapper.selectRole();
     }
+
+    @Override
+    public Users selecting(String username) {
+        return usersMapper.selecting(username);
+    }
 }

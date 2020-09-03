@@ -14,6 +14,20 @@
         <result column="update_time" property="updateTime" />
         <result column="last_login_time" property="lastLoginTime" />
         <result column="locaed" property="locaed" />
+    </resultMap>
+
+    <!-- 查询用户拥有角色映射 -->
+    <resultMap id="BaseResultMap1" type="com.ssh.users.entity.Users">
+        <result column="username" property="username" />
+        <result column="phone" property="phone" />
+        <result column="password" property="password" />
+        <result column="salt" property="salt" />
+        <result column="icon" property="icon" />
+        <result column="address" property="address" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="last_login_time" property="lastLoginTime" />
+        <result column="locaed" property="locaed" />
         <collection property="roles" ofType="com.ssh.users.entity.Roles">
             <result column="rolename" property="rolename" />
             <result column="description" property="description" />
@@ -29,10 +43,14 @@
     </sql>
 
     <!-- 根据登录用户名查询用户的角色 -->
-    <select id="selectRole" resultMap="BaseResultMap">
+    <select id="selectRole" resultMap="BaseResultMap1">
 
         SELECT * FROM sys_users u,sys_user_role ur,sys_roles r WHERE u.username = 'admin' AND u.id = ur.user_id AND ur.role_id = r.id
 
+    </select>
+
+    <select id="selecting" resultMap="BaseResultMap" >
+         SELECT  username,phone,password,salt,icon,address,create_time,update_time,last_login_time,locaed  FROM sys_users  where username = #{usernmae}
     </select>
 
 </mapper>

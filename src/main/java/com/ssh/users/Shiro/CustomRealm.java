@@ -2,20 +2,21 @@ package com.ssh.users.Shiro;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ssh.users.controller.UsersController;
 import com.ssh.users.entity.Permissions;
 import com.ssh.users.entity.Roles;
 import com.ssh.users.entity.Users;
 import com.ssh.users.mapper.UsersMapper;
 import com.ssh.users.service.IUsersService;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
@@ -25,9 +26,6 @@ public class CustomRealm extends AuthorizingRealm {
     @Resource
     private IUsersService iUsersService;
     
-    @Resource
-    private UsersMapper usersMapper;
-
     //实现权限认证
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
@@ -61,19 +59,17 @@ public class CustomRealm extends AuthorizingRealm {
 
         //获取登录用户名
         String username = (String) authenticationToken.getPrincipal();
-        System.out.println(username+"==========================================");
         //根据登录用户名查询数据库
-        Users user = iUsersService.getOne((Wrapper<Users>) authenticationToken.getPrincipal());
-        System.out.println(user);
-        ByteSource salt = ByteSource.Util.bytes(user.getUsername()+user.getSalt());
+        Users user = iUsersService.selecting(username);
         if(user == null){
             return null; //如果没有查询到当前用户  返回 用户名或密码错误
         }else {
+            ByteSource salt = ByteSource.Util.bytes(user.getSalt());
             // 这里验证authenticationToken和simpleAuthenticationInfo的信息
             SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(
-                    username, //用户名
+                    user, //用户名
                     user.getPassword(), //密码
-                    salt, //加盐的盐值
+//                    salt, //加盐的盐值
                     getName()); //realm name
             return simpleAuthenticationInfo;
         }
