@@ -51,11 +51,10 @@ public class UsersController {
     }
 
     @RequestMapping(value = "index",method = RequestMethod.POST)
-    public String login(String username,String userpwd){
-
+    public String login(Users u){
 
         Subject subject = SecurityUtils.getSubject();
-        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username,userpwd);
+        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(u.getUsername(),u.getPassword());
         try {
             subject.login(usernamePasswordToken);
         }catch (UnknownAccountException uk){

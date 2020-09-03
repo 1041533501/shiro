@@ -94,23 +94,23 @@ public class ShiroConfig {
      *
      * @return
      */
-//    @Bean
-//    public HashedCredentialsMatcher hashedCredentialsMatcher(){
-//
-//        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
-//        hashedCredentialsMatcher.setHashAlgorithmName("MD5"); //MD加密算法
-//        hashedCredentialsMatcher.setHashIterations(1024); //散列的次数
-//        return hashedCredentialsMatcher;
-//
-//    }
+    @Bean
+    public HashedCredentialsMatcher hashedCredentialsMatcher(){
 
-//    @Bean
-//    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager){
-//
-//        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
-//        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
-//        return authorizationAttributeSourceAdvisor;
-//
-//    }
+        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
+        hashedCredentialsMatcher.setHashAlgorithmName("MD5"); //MD加密算法
+        hashedCredentialsMatcher.setHashIterations(1024); //散列的次数
+        return hashedCredentialsMatcher;
+
+    }
+
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager){
+
+        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+        return authorizationAttributeSourceAdvisor;
+
+    }
 
 }
