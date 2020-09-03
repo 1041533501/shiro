@@ -4,11 +4,16 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ssh.users.entity.Roles">
-        <result column="id" property="id" />
         <result column="rolename" property="rolename" />
         <result column="description" property="description" />
         <result column="available" property="available" />
-
+        <collection property="permissions" ofType="com.ssh.users.entity.Permissions">
+            <result column="NAME" property="name" />
+            <result column="url" property="url" />
+            <result column="TYPE" property="type" />
+            <result column="pid" property="pid" />
+            <result column="available" property="available" />
+        </collection>
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -16,5 +21,10 @@
         id,
         rolename, description, available
     </sql>
+
+    <!-- 根据用户角色查询用户权限 -->
+    <select id="SelectRolePer" resultMap="BaseResultMap">
+        SELECT * FROM sys_roles r,sys_role_permission rp,sys_permissions p WHERE r.id = 2 AND r.id = rp.role_id AND p.id = rp.permission_id
+    </select>
 
 </mapper>

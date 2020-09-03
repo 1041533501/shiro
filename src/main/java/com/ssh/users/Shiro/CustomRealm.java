@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ssh.users.entity.Permissions;
 import com.ssh.users.entity.Roles;
 import com.ssh.users.entity.Users;
+import com.ssh.users.mapper.UsersMapper;
 import com.ssh.users.service.IUsersService;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -23,6 +24,9 @@ public class CustomRealm extends AuthorizingRealm {
 
     @Resource
     private IUsersService iUsersService;
+    
+    @Resource
+    private UsersMapper usersMapper;
 
     //实现权限认证
     @Override
@@ -57,9 +61,11 @@ public class CustomRealm extends AuthorizingRealm {
 
         //获取登录用户名
         String username = (String) authenticationToken.getPrincipal();
+        System.out.println(username+"==========================================");
         //根据登录用户名查询数据库
         Users user = iUsersService.getOne((Wrapper<Users>) authenticationToken.getPrincipal());
-        ByteSource salt = ByteSource.Util.bytes(user.getSalt());
+        System.out.println(user);
+        ByteSource salt = ByteSource.Util.bytes(user.getUsername()+user.getSalt());
         if(user == null){
             return null; //如果没有查询到当前用户  返回 用户名或密码错误
         }else {
@@ -71,6 +77,5 @@ public class CustomRealm extends AuthorizingRealm {
                     getName()); //realm name
             return simpleAuthenticationInfo;
         }
-
     }
 }

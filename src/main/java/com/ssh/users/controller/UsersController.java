@@ -2,7 +2,9 @@ package com.ssh.users.controller;
 
 
 
+import com.ssh.users.entity.Roles;
 import com.ssh.users.entity.Users;
+import com.ssh.users.service.IRolesService;
 import com.ssh.users.service.IUsersService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -35,12 +37,21 @@ public class UsersController {
     @Resource
     private IUsersService iUsersService;
 
-    @RequestMapping(value = "index",method = RequestMethod.GET)
-    public String login(){
-//        List<Users> list = iUsersService.list();
-//        list.forEach(System.out :: println);
+    @Resource
+    private IRolesService iRolesService;
 
-        iUsersService.selectRole();
+    @RequestMapping(value = "login",method = RequestMethod.GET)
+    public String login1(){
+        return "login";
+    }
+
+    @RequestMapping(value = "index",method = RequestMethod.POST)
+    public String login(Users users){
+        System.out.println(users);
+//        List<Users> users = iUsersService.selectRole();
+//        List<Roles> roles = iRolesService.SelectRolePer();
+
+
 
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken("admin","admin");
@@ -59,6 +70,12 @@ public class UsersController {
 
 
         return "success";
+    }
+
+    @RequestMapping(value = "zc",method = RequestMethod.GET)
+    public String zhcue(){
+
+        return "zhuce";
     }
 
 }
