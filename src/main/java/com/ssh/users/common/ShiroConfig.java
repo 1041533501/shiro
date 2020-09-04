@@ -99,9 +99,8 @@ public class ShiroConfig {
         HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
         hashedCredentialsMatcher.setHashAlgorithmName("MD5"); //MD加密算法
         hashedCredentialsMatcher.setHashIterations(3); //散列的次数
-        hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
-        //存储散列后的密码是否为16进制
-        //hashedCredentialsMatcher.isStoredCredentialsHexEncoded();
+        hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true); //存储散列后的密码是否为16进制
+
         return hashedCredentialsMatcher;
 
     }
