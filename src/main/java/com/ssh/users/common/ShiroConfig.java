@@ -23,6 +23,7 @@ public class ShiroConfig {
     public CustomRealm myAuthRealm(){
         CustomRealm customRealm = new CustomRealm();
         System.out.println("**********realm注册完成**********");
+        customRealm.setCredentialsMatcher(hashedCredentialsMatcher());
         return customRealm;
     }
 
@@ -66,8 +67,6 @@ public class ShiroConfig {
         filterChainMap.put("/css/**", "anon");
         filterChainMap.put("/imgs/**", "anon");
         filterChainMap.put("/js/**", "anon");
-        filterChainMap.put("/swagger-*/**", "anon");
-        filterChainMap.put("/swagger-ui.html/**", "anon");
 
         //登录URL放行
         filterChainMap.put("/users/login","anon");
@@ -99,7 +98,10 @@ public class ShiroConfig {
 
         HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
         hashedCredentialsMatcher.setHashAlgorithmName("MD5"); //MD加密算法
-        hashedCredentialsMatcher.setHashIterations(1024); //散列的次数
+        hashedCredentialsMatcher.setHashIterations(3); //散列的次数
+        hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
+        //存储散列后的密码是否为16进制
+        //hashedCredentialsMatcher.isStoredCredentialsHexEncoded();
         return hashedCredentialsMatcher;
 
     }

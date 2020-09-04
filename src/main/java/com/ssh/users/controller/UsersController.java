@@ -13,6 +13,8 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +52,7 @@ public class UsersController {
         return "login";
     }
 
+
     @RequestMapping(value = "index",method = RequestMethod.POST)
     public String login(Users u){
 
@@ -60,11 +63,12 @@ public class UsersController {
         }catch (UnknownAccountException uk){
             logger.error("用户不存在");
             return "redirect:login";
-        }catch (IncorrectCredentialsException Il){
-            logger.error("用户名或密码错误");
-            return "redirect:login";
         }
-        return "index";
+//        catch (IncorrectCredentialsException Il){
+//            logger.error("用户名或密码错误");
+//            return "redirect:login";
+//        }
+        return "success";
     }
 
     @RequestMapping(value = "success",method = RequestMethod.GET)
@@ -84,7 +88,11 @@ public class UsersController {
     public String saveuser(Users users){
 
         String salt = UUID.randomUUID().toString().replace("-","").replace(",","");
-        return "login";
+        SimpleHash simpleHash = new SimpleHash("MD5",users.getPassword(),salt,3);
+        users.setSalt(salt);
+        users.setPassword(simpleHash.toString());
+        iUsersService.save(users);
+        return "redirect:login";
     }
 
 }

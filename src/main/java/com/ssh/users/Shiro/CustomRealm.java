@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
+import java.util.Base64;
 
 public class CustomRealm extends AuthorizingRealm {
 
@@ -67,10 +68,11 @@ public class CustomRealm extends AuthorizingRealm {
             ByteSource salt = ByteSource.Util.bytes(user.getSalt());
             // 这里验证authenticationToken和simpleAuthenticationInfo的信息
             SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(
-                    user, //用户名
+                    user.getUsername(), //用户名
                     user.getPassword(), //密码
-//                    salt, //加盐的盐值
-                    getName()); //realm name
+                    salt, //加盐的盐值
+                    getName()
+                    ); //realm name
             return simpleAuthenticationInfo;
         }
     }
