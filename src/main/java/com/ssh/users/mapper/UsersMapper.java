@@ -18,7 +18,7 @@ import java.util.List;
 public interface UsersMapper extends BaseMapper<Users> {
 
 
-    List<Users> selectRole();
+    Users selectRole(String username);
     Users selecting(String username);
 
 }

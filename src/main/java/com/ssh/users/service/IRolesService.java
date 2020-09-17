@@ -15,6 +15,6 @@ import java.util.List;
  */
 public interface IRolesService extends IService<Roles> {
 
-    List<Roles> SelectRolePer();
+    Roles SelectRolePer(Integer rid);
 
 }

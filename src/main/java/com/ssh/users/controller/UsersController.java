@@ -2,6 +2,7 @@ package com.ssh.users.controller;
 
 
 
+import cn.hutool.core.lang.Console;
 import cn.hutool.crypto.digest.DigestAlgorithm;
 import cn.hutool.crypto.digest.DigestUtil;
 import cn.hutool.crypto.digest.Digester;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -55,7 +57,6 @@ public class UsersController {
 
     @RequestMapping(value = "index",method = RequestMethod.POST)
     public String login(Users u){
-
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(u.getUsername(),u.getPassword());
         try {
@@ -63,18 +64,10 @@ public class UsersController {
         }catch (UnknownAccountException uk){
             logger.error("用户不存在");
             return "redirect:login";
+        }catch (IncorrectCredentialsException Il){
+            logger.error("用户名或密码错误");
+            return "redirect:login";
         }
-//        catch (IncorrectCredentialsException Il){
-//            logger.error("用户名或密码错误");
-//            return "redirect:login";
-//        }
-        return "success";
-    }
-
-    @RequestMapping(value = "success",method = RequestMethod.GET)
-    public String success(){
-
-
         return "success";
     }
 
@@ -93,6 +86,20 @@ public class UsersController {
         users.setPassword(simpleHash.toString());
         iUsersService.save(users);
         return "redirect:login";
+    }
+
+    @ResponseBody
+    @RequiresRoles("超级管理")
+    @RequestMapping(value = "select",method = RequestMethod.GET)
+    public String testRole(){
+//        Subject subject = SecurityUtils.getSubject();
+//        boolean admin = subject.hasRole("超级管理");
+//        if(admin){
+//            return "拥有权限";
+//        }else {
+//            return "权限不够";
+//        }
+        return "超级管理页面";
     }
 
 }

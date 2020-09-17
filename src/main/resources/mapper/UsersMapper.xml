@@ -29,6 +29,7 @@
         <result column="last_login_time" property="lastLoginTime" />
         <result column="locaed" property="locaed" />
         <collection property="roles" ofType="com.ssh.users.entity.Roles">
+            <result column="id" property="id"/>
             <result column="rolename" property="rolename" />
             <result column="description" property="description" />
             <result column="available" property="available" />
@@ -45,12 +46,14 @@
     <!-- 根据登录用户名查询用户的角色 -->
     <select id="selectRole" resultMap="BaseResultMap1">
 
-        SELECT * FROM sys_users u,sys_user_role ur,sys_roles r WHERE u.username = 'admin' AND u.id = ur.user_id AND ur.role_id = r.id
+        SELECT
+        *
+        FROM sys_users u,sys_user_role ur,sys_roles r WHERE u.username = #{username} AND u.id = ur.user_id AND ur.role_id = r.id
 
     </select>
 
     <select id="selecting" resultMap="BaseResultMap" >
-         SELECT  username,phone,password,salt,icon,address,create_time,update_time,last_login_time,locaed  FROM sys_users  where username = #{usernmae}
+         SELECT  <include refid="Base_Column_List"/>  FROM sys_users  where username = #{usernmae}
     </select>
 
 </mapper>

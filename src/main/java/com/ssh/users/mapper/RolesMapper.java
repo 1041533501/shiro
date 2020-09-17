@@ -16,5 +16,5 @@ import java.util.List;
  */
 @Mapper
 public interface RolesMapper extends BaseMapper<Roles> {
-    List<Roles> SelectRolePer();
+    Roles SelectRolePer(Integer rid);
 }

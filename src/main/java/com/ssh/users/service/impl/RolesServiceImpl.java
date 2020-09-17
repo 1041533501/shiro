@@ -24,7 +24,7 @@ public class RolesServiceImpl extends ServiceImpl<RolesMapper, Roles> implements
     private RolesMapper rolesMapper;
 
     @Override
-    public List<Roles> SelectRolePer() {
-        return rolesMapper.SelectRolePer();
+    public Roles SelectRolePer(Integer rid) {
+        return rolesMapper.SelectRolePer(rid);
     }
 }

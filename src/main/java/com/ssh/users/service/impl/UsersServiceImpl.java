@@ -24,9 +24,10 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
     private UsersMapper usersMapper;
 
     @Override
-    public List<Users> selectRole() {
-        return usersMapper.selectRole();
+    public Users selectRole(String username) {
+        return usersMapper.selectRole(username);
     }
+
 
     @Override
     public Users selecting(String username) {

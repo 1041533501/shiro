@@ -1,5 +1,6 @@
 package com.ssh.users.Shiro;
 
+import cn.hutool.core.lang.Console;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ssh.users.controller.UsersController;
@@ -7,6 +8,7 @@ import com.ssh.users.entity.Permissions;
 import com.ssh.users.entity.Roles;
 import com.ssh.users.entity.Users;
 import com.ssh.users.mapper.UsersMapper;
+import com.ssh.users.service.IRolesService;
 import com.ssh.users.service.IUsersService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -21,31 +23,42 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.Base64;
+import java.util.List;
 
 public class CustomRealm extends AuthorizingRealm {
 
     @Resource
     private IUsersService iUsersService;
+
+    @Resource
+    private IRolesService iRolesService;
     
     //实现权限认证
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+
         //获取登录用户名
         String username = (String) principalCollection.getPrimaryPrincipal();
         //根据登录用户名查询数据库
-        Users user = iUsersService.getOne((Wrapper<Users>) principalCollection.getPrimaryPrincipal());
+        Users users = iUsersService.selectRole(username);
         //添加角色权限
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         //查询出当前用户对应的角色  并且将角色添加
-        for (Roles role : user.getRoles()) {
-            simpleAuthorizationInfo.addRole(role.getRolename());
-            //查询出当前角色对应的权限
-            for (Permissions permissions:
-                 role.getPermissions()) {
-                //将对应的权限添加到对应的角色中
-                simpleAuthorizationInfo.addStringPermission(permissions.getName());
+        try {
+            for (Roles role : users.getRoles()) {
+                simpleAuthorizationInfo.addRole(role.getRolename());
+                //查询出当前角色对应的权限
+                Roles roles = iRolesService.SelectRolePer(role.getId());
+                for (Permissions permissions:
+                        roles.getPermissions()) {
+                    //将对应的权限添加到对应的角色中
+                    simpleAuthorizationInfo.addStringPermission(permissions.getName());
+                }
             }
+        }catch (Exception e){
+            e.getMessage();
         }
+
         //返回填充的数据
         return simpleAuthorizationInfo;
     }

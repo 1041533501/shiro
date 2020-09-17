@@ -24,7 +24,7 @@
 
     <!-- 根据用户角色查询用户权限 -->
     <select id="SelectRolePer" resultMap="BaseResultMap">
-        SELECT * FROM sys_roles r,sys_role_permission rp,sys_permissions p WHERE r.id = 2 AND r.id = rp.role_id AND p.id = rp.permission_id
+        SELECT * FROM sys_roles r,sys_role_permission rp,sys_permissions p WHERE r.id = #{rid} AND r.id = rp.role_id AND p.id = rp.permission_id
     </select>
 
 </mapper>

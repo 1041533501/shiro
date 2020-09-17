@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface IUsersService extends IService<Users> {
 
-    List<Users> selectRole();
+    Users selectRole(String username);
     Users selecting(String username);
 
 }

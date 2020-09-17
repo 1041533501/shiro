@@ -22,6 +22,7 @@ public class Roles implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private Integer id;
     /**
      * 角色名称
      */
